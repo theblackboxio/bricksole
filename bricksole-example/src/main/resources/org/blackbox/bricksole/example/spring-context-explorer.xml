@@ -10,13 +10,9 @@
 
     <bean id="commandContext" class="org.blackbox.bricksole.ExplorerCommandContext">
     </bean>
-    <bean id="versionCommand" class="org.blackbox.bricksole.command.EchoCommand">
+    <bean id="versionCommand" class="org.blackbox.bricksole.example.VersionCommand">
         <constructor-arg value="${command.version.message}"/>
     </bean>
 
-    <bean id="versionNamedCommand" class="org.blackbox.bricksole.NamedCommandWraper">
-        <constructor-arg ref="versionCommand"/>
-        <constructor-arg value="version"/>
-    </bean>
 
 </beans>

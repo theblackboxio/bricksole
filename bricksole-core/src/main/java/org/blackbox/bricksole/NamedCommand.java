@@ -1,21 +1,26 @@
 package org.blackbox.bricksole;
 
+import java.lang.annotation.*;
+
 /**
- * Interface for a named command, that is a command object that contains itself its command name.
+ * Annotation for a named command, that is a command object that contains itself its command name.
  *
- * This interface is used by org.blackbox.bricksole.ExplorerCommandContext to get the name of the
+ * This annotation is used by org.blackbox.bricksole.ExplorerCommandContext to get the name of the
  * explored commands.
  *
  * @author guillermoblascojimenez
  * @see org.blackbox.bricksole.ExplorerCommandContext
  */
-public interface NamedCommand extends Command {
+@Target(ElementType.TYPE)
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+public @interface NamedCommand {
 
     /**
      * Name of the command object.
      *
      * @return Name of the command object.
      */
-    String getName();
+    String value();
 
 }

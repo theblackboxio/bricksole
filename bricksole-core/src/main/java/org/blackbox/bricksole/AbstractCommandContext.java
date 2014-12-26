@@ -10,10 +10,10 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Created by guillermoblascojimenez on 26/12/14.
  */
-abstract class AbstractCommandContext<C extends Command> implements CommandContext {
+abstract class AbstractCommandContext implements CommandContext {
     protected final PrintStream printStream;
     protected final InputStream inputStream;
-    protected final ConcurrentMap<String, C> commands;
+    protected final ConcurrentMap<String, Command> commands;
 
     public AbstractCommandContext() {
         this(System.out, System.in);

@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by guillermoblascojimenez on 26/12/14.
  */
-public class DeclarativeCommandContext extends AbstractCommandContext<Command> implements CommandContext {
+public class DeclarativeCommandContext extends AbstractCommandContext implements CommandContext {
 
     public DeclarativeCommandContext(Map<String, ? extends Command> commands) {
         super();

@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by guillermoblascojimenez on 26/12/14.
  */
-public class ExplorerCommandContext extends AbstractCommandContext<NamedCommand> implements ApplicationContextAware {
+public class ExplorerCommandContext extends AbstractCommandContext implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
@@ -30,12 +30,14 @@ public class ExplorerCommandContext extends AbstractCommandContext<NamedCommand>
 
     public void collectCommands() {
 
-        Map<String, NamedCommand> commands = applicationContext.getBeansOfType(NamedCommand.class);
+        Map<String, Object> commands = applicationContext.getBeansWithAnnotation(NamedCommand.class);
 
-        for (NamedCommand command : commands.values()) {
-            NamedCommand oldCommand = this.commands.putIfAbsent(command.getName(), command);
+        for (Object command : commands.values()) {
+            String name = command.getClass().getAnnotation(NamedCommand.class).value();
+
+            Command oldCommand = this.commands.putIfAbsent(name, (Command) command);
             if (oldCommand != null) {
-                throw new IllegalStateException("Command with name " + command.getName() + " duplicated.");
+                throw new IllegalStateException("Command with name " + name + " duplicated.");
             }
         }
     }
