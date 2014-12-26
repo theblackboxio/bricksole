@@ -3,6 +3,7 @@ package org.blackbox.bricksole;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -25,7 +26,17 @@ abstract class AbstractCommandContext<C extends Command> implements CommandConte
     }
 
     @Override
-    public void execute(String commandName, List<String> args){
-        commands.get(commandName).execute(printStream, inputStream, args);
+    public void execute(String commandName, List<String> args) throws CommandNotFoundException {
+        Command command = commands.get(commandName);
+        if (command == null) {
+            throw new CommandNotFoundException("Command with name \"" + commandName + "\" not found in context.");
+        } else {
+            command.execute(printStream, inputStream, args);
+        }
+    }
+
+    @Override
+    public Set<String> commandNames() {
+        return commands.keySet();
     }
 }

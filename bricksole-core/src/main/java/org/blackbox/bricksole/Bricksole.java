@@ -41,7 +41,11 @@ public class Bricksole implements Runnable {
         // dispatch the requested command
         String commandName = arguments.get(0);
         List<String> commandArguments = arguments.subList(1, arguments.size());
-        commandContext.execute(commandName, commandArguments);
+        try {
+            commandContext.execute(commandName, commandArguments);
+        } catch (CommandNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 
