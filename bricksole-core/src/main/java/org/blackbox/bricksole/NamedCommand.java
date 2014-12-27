@@ -9,7 +9,7 @@ import java.lang.annotation.*;
  * explored commands.
  *
  * @author guillermoblascojimenez
- * @see org.blackbox.bricksole.ExplorerCommandContext
+ * @see org.blackbox.bricksole.ConfigurableCommandContext
  */
 @Target(ElementType.TYPE)
 @Documented

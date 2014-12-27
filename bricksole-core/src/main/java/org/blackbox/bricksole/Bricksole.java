@@ -33,11 +33,6 @@ public class Bricksole implements Runnable {
         // take the command context instance
         CommandContext commandContext = applicationContext.getBean(commandContextBeanId, CommandContext.class);
 
-        // in case that is an ExplorerCommandContext it has to collect the command beans
-        if (commandContext instanceof ExplorerCommandContext) {
-            ((ExplorerCommandContext) commandContext).collectCommands();
-        }
-
         // dispatch the requested command
         String commandName = arguments.get(0);
         List<String> commandArguments = arguments.subList(1, arguments.size());

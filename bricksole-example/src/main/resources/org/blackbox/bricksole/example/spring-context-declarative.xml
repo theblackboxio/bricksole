@@ -8,14 +8,21 @@
     <!-- properties loading -->
     <context:property-placeholder location="classpath:org/blackbox/bricksole/example/main.properties"/>
 
-    <bean id="commandContext" class="org.blackbox.bricksole.DeclarativeCommandContext">
+    <!--
+        create command context with a ConfigurableCommandContext. It is important to call as
+        init method the configure.
+        In this example the commands are passed as a map.
+     -->
+    <bean id="commandContext" class="org.blackbox.bricksole.ConfigurableCommandContext" init-method="configure">
         <constructor-arg>
+            <!-- map of command names to command objects -->
             <map>
                 <entry key="${command.version.name}" value-ref="versionCommand"/>
             </map>
         </constructor-arg>
     </bean>
 
+    <!-- here some command declarations -->
     <bean id="versionCommand" class="org.blackbox.bricksole.example.VersionCommand">
         <constructor-arg value="${command.version.message}"/>
     </bean>

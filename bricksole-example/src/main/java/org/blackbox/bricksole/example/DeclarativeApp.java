@@ -6,7 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by guillermoblascojimenez on 26/12/14.
+ * Example of how to execute Bricksole with a spring configuration that will load commands
+ * declared in spring xml.
  */
 public class DeclarativeApp {
 

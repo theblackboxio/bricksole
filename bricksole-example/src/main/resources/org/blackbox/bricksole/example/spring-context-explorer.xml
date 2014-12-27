@@ -8,11 +8,18 @@
     <!-- properties loading -->
     <context:property-placeholder location="classpath:org/blackbox/bricksole/example/main.properties"/>
 
-    <bean id="commandContext" class="org.blackbox.bricksole.ExplorerCommandContext">
+    <!--
+        create command context with a ConfigurableCommandContext. It is important to call as
+        init method the configure.
+        In this example the commands are explored in the bean container looking for annotated commands.
+     -->
+    <bean id="commandContext" class="org.blackbox.bricksole.ConfigurableCommandContext" init-method="configure">
+        <property name="collectPolicy" value="COLLECT_ANNOTATED_WITH_NAME"/>
     </bean>
+
+    <!-- here some command declarations -->
     <bean id="versionCommand" class="org.blackbox.bricksole.example.VersionCommand">
         <constructor-arg value="${command.version.message}"/>
     </bean>
-
 
 </beans>

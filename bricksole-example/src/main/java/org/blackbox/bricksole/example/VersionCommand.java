@@ -4,7 +4,8 @@ import org.blackbox.bricksole.NamedCommand;
 import org.blackbox.bricksole.command.EchoCommand;
 
 /**
- * Created by guillermoblascojimenez on 26/12/14.
+ * Example Command that prints the version of the app.
+ * The class is annotated as "version" so it can be called with this name.
  */
 @NamedCommand("version")
 public class VersionCommand extends EchoCommand {

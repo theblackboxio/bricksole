@@ -1,6 +1,9 @@
 package org.blackbox.bricksole;
 
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -19,10 +22,33 @@ public interface CommandContext {
      */
     void execute(String commandName, List<String> arguments) throws CommandNotFoundException;
 
+    PrintStream getPrintStream();
+
+    InputStream getInputStream();
+
     /**
      * Returns the command names stored in the command context.
      *
      * @return The set of command names stored in this.
      */
     Set<String> commandNames();
+
+    boolean containsCommandName(String commandName);
+
+    boolean containsCommend(Command command);
+
+    void addCommand(String commandName, Command command);
+
+    void addAllCommands(Map<String, ? extends Command> commands);
+
+    void overrideCommand(String commandName, Command command);
+
+    void overrideAllCommands(Map<String, ? extends Command> commands);
+
+    void remove(String commandName);
+
+    int size();
+
+    boolean isEmpty();
+
 }

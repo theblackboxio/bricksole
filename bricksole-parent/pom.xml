@@ -85,9 +85,11 @@
                         <assembleDirectory>${project.build.directory}/appassembler</assembleDirectory>
                         <platforms>
                             <platform>unix</platform>
+                            <platform>windows</platform>
                         </platforms>
                         <binFileExtensions>
                             <unix>.sh</unix>
+                            <windows>.bat</windows>
                         </binFileExtensions>
                     </configuration>
                     <executions>
