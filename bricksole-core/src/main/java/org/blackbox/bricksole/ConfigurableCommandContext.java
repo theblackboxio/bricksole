@@ -10,12 +10,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by guillermoblascojimenez on 27/12/14.
+ * Configurable command context that allows to load commands initially and to collect them from
+ * spring bean container.
  */
 public class ConfigurableCommandContext extends AbstractCommandContext implements ApplicationContextAware {
 
+    /**
+     * Collection policies.
+     */
     public enum CollectPolicy {
+        /** This policy shall collect all beans annotated with @NamedCommand */
         COLLECT_ANNOTATED_WITH_NAME,
+        /** This policy shall collect nothing */
         COLLECT_NOTHING
     }
 
@@ -23,16 +29,23 @@ public class ConfigurableCommandContext extends AbstractCommandContext implement
 
     private ApplicationContext applicationContext;
 
-    private final Map<String, Command> initialCommands;
+    private final Map<String, Command> initialCommands = new HashMap<>();
 
+    /**
+     * Creates a empty configurable command context. Uses as streams the provided by System.
+     */
     public ConfigurableCommandContext() {
         super();
-        this.initialCommands = new HashMap<>();
     }
 
+    /**
+     * Creates an empty configurable command context with the given streams.
+     *
+     * @param printStream
+     * @param inputStream
+     */
     public ConfigurableCommandContext(PrintStream printStream, InputStream inputStream) {
         super(printStream, inputStream);
-        this.initialCommands = new HashMap<>();
     }
 
     public ConfigurableCommandContext(Map<String, ? extends Command> initialCommands) {

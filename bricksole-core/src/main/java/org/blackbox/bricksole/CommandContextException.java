@@ -1,7 +1,7 @@
 package org.blackbox.bricksole;
 
 /**
- * Created by guillermoblascojimenez on 26/12/14.
+ * Exception of command context environment.
  */
 public class CommandContextException extends Exception {
 

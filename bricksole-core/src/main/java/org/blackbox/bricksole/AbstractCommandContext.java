@@ -9,19 +9,30 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * Created by guillermoblascojimenez on 26/12/14.
+ * An abstract implementation of CommandContext. Holds the streams and a concurrent map of commands.
+ * Also implements all map-like functions, some getters and a simple implementation of
+ * execute method.
  */
 abstract class AbstractCommandContext implements CommandContext {
 
-    protected final PrintStream printStream;
-    protected final InputStream inputStream;
+    private final PrintStream printStream;
+    private final InputStream inputStream;
     protected final ConcurrentMap<String, Command> commands;
 
-    public AbstractCommandContext() {
+    /**
+     * Builds the command context with System.out and System.in as default streams.
+     */
+    AbstractCommandContext() {
         this(System.out, System.in);
     }
 
-    public AbstractCommandContext(PrintStream printStream, InputStream inputStream) {
+    /**
+     * Builds the context with the given parameters.
+     *
+     * @param printStream PrintStream where the commands outputs.
+     * @param inputStream InputStream where the commands reads.
+     */
+    AbstractCommandContext(PrintStream printStream, InputStream inputStream) {
         this.printStream = printStream;
         this.inputStream = inputStream;
         this.commands = new ConcurrentHashMap<>();

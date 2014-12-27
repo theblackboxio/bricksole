@@ -1,7 +1,7 @@
 package org.blackbox.bricksole;
 
 /**
- * Created by guillermoblascojimenez on 27/12/14.
+ * Exception thrown in case of that the context is asked to hold two commands for the same name
  */
 public class CommandNameDuplicatedException extends CommandContextException {
 
