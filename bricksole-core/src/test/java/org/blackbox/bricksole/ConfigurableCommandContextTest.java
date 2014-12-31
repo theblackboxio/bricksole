@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,7 +17,6 @@ public class ConfigurableCommandContextTest {
 
     private ConfigurableCommandContext context;
     private ByteArrayOutputStream outputStream;
-    private InputStream inputStream;
 
     @Before
     public void setup() throws CommandInitializationException {
@@ -26,26 +24,30 @@ public class ConfigurableCommandContextTest {
         PrintStream printStream = new PrintStream(outputStream);
 
         List<Object> commands = Arrays.asList(new EchoCommand(), new AnotherCommand());
-        context = new ConfigurableCommandContext(printStream, inputStream, commands);
+        context = new ConfigurableCommandContext(new Configuration()
+                .setPrintStream(printStream)
+                .setCommands(new EchoCommand(), new AnotherCommand()));
         context.configure();
+        Assert.assertTrue(context.isConfigured());
     }
 
     @Test(expected = CommandNameDuplicatedException.class)
     public void testDuplicated() throws CommandInitializationException {
         List<Object> commands = Arrays.<Object>asList(new EchoCommand(), new EchoCommand());
-        ConfigurableCommandContext context2 = new ConfigurableCommandContext(System.out, System.in, commands);
+        ConfigurableCommandContext context2 = new ConfigurableCommandContext(commands);
         context2.configure();
     }
 
     @Test(expected = CommandInitializationParseException.class)
     public void testParseException() throws CommandInitializationException {
         List<Object> commands = Arrays.<Object>asList(new WrongCommand());
-        ConfigurableCommandContext context2 = new ConfigurableCommandContext(System.out, System.in, commands);
+        ConfigurableCommandContext context2 = new ConfigurableCommandContext(commands);
         context2.configure();
     }
 
     @Test
     public void testCall() throws CommandContextException {
+        Assert.assertTrue(context.isConfigured());
         String message = "some message";
         context.execute("echo:message", Arrays.asList(message));
         String result = outputStream.toString();
@@ -60,6 +62,7 @@ public class ConfigurableCommandContextTest {
 
     @Test
     public void testCall2() throws CommandContextException {
+        Assert.assertTrue(context.isConfigured());
         String message = "some message";
         context.execute("echo:message2", Arrays.asList("-v", message));
         String result = outputStream.toString();

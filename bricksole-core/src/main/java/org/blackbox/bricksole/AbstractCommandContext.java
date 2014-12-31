@@ -41,6 +41,9 @@ abstract class AbstractCommandContext implements CommandContext {
 
     @Override
     public void execute(String commandName, List<String> args) throws CommandNotFoundException, CommandCallException {
+        if (!isConfigured()) {
+            throw new CommandRuntimeException("Command context has been asked to execute a command but context is not configured.");
+        }
         CallableCommand command = commands.get(commandName);
         if (command == null) {
             throw new CommandNotFoundException("Command with name \"" + commandName + "\" not found in context.");

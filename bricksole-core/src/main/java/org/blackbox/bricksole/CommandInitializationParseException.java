@@ -1,7 +1,7 @@
 package org.blackbox.bricksole;
 
 /**
- * Created by guillermoblascojimenez on 30/12/14.
+ * Exceptuon thrown during the command parse.
  */
 public class CommandInitializationParseException extends CommandInitializationException {
 

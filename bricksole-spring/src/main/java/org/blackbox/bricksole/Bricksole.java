@@ -3,6 +3,7 @@ package org.blackbox.bricksole;
 import com.google.common.base.Preconditions;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class Bricksole {
     /**
      * Full constructor. The contextLocation have to be an xml resource of a Spring context
      * application.
-     * @param contextLocation Xml resource defining a Spring context application.
+     * @param contextLocation Xml resource or file defining a Spring context application.
      * @param commandContextBeanId Id of the command context bean.
      */
     public Bricksole(String contextLocation, String commandContextBeanId) {
@@ -35,7 +36,7 @@ public class Bricksole {
     /**
      * The command context id shall be inferred via class. If there are multiple beans for
      * CommandContext type then an exception is thrown.
-     * @param contextLocation Xml resource defining a Spring context application.
+     * @param contextLocation Xml resource or file defining a Spring context application.
      */
     public Bricksole(String contextLocation) {
 
@@ -51,7 +52,11 @@ public class Bricksole {
     public void start() {
         Preconditions.checkState(applicationContext == null, "Bricksole has been already started.");
         // Load spring context
-        applicationContext = new ClassPathXmlApplicationContext(this.contextLocation);
+        if (this.contextLocation.startsWith("classpath")) {
+            applicationContext = new ClassPathXmlApplicationContext(this.contextLocation);
+        } else {
+            applicationContext = new FileSystemXmlApplicationContext(this.contextLocation);
+        }
         // shutdown spring gracefully
         applicationContext.registerShutdownHook();
 

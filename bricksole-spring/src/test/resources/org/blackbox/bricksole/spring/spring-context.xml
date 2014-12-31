@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="commandInspector" class="org.blackbox.bricksole.spring.SimpleCommandSpringInspector"/>
+
+    <!-- here some command declarations -->
+    <bean id="versionCommand" class="org.blackbox.bricksole.spring.EchoCommand"/>
+    <bean id="anotherCommand" class="org.blackbox.bricksole.spring.AnotherCommand"/>
+
+    <!-- something that is not a command at all -->
+    <bean id="notCommand" class="java.lang.Object"/>
+
+</beans>

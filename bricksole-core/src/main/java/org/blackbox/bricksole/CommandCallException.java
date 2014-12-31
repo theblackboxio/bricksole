@@ -1,7 +1,7 @@
 package org.blackbox.bricksole;
 
 /**
- * Created by guillermoblascojimenez on 30/12/14.
+ * Exception thrown in the call phase.
  */
 public class CommandCallException extends CommandRuntimeException {
 

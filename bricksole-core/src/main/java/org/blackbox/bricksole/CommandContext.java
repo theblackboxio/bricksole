@@ -13,8 +13,13 @@ import java.util.Set;
  */
 public interface CommandContext {
 
+    /**
+     * Possible status of a CommandContext.
+     */
     enum Status {
+        /** The context has been declared but not configured */
         DECLARED,
+        /** The context has been declared and configured */
         CONFIGURED
     }
 

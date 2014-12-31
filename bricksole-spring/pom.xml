@@ -10,16 +10,27 @@
         <version>1.0.0</version>
         <relativePath>../bricksole-parent</relativePath>
     </parent>
+
     <groupId>org.blackbox.bricksole</groupId>
-    <artifactId>bricksole-core</artifactId>
+    <artifactId>bricksole-spring</artifactId>
     <version>1.0.0</version>
-    <description>Spring based modular console app</description>
-    <name>bricksole core</name>
-    <url>https://github.com/theblackboxio/bricksole</url>
-    <packaging>jar</packaging>
 
     <dependencies>
 
+        <dependency>
+            <groupId>org.blackbox.bricksole</groupId>
+            <artifactId>bricksole-core</artifactId>
+        </dependency>
+        
+        <!-- spring artifacts -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
 
         <!-- utils -->
         <dependency>
@@ -39,15 +50,4 @@
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
-
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>

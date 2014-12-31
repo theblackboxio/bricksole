@@ -1,7 +1,7 @@
 package org.blackbox.bricksole;
 
 /**
- * Created by guillermoblascojimenez on 31/12/14.
+ * Command runtime exception parent.
  */
 public class CommandRuntimeException extends RuntimeException {
     public CommandRuntimeException() {

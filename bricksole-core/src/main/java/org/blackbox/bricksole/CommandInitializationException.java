@@ -1,7 +1,7 @@
 package org.blackbox.bricksole;
 
 /**
- * Created by guillermoblascojimenez on 30/12/14.
+ * Exception thrown during the command initialization phase.
  */
 public class CommandInitializationException extends CommandContextException {
 

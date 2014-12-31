@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by guillermoblascojimenez on 30/12/14.
+ * Class that wraps an object method annotated as Command.
  */
 class CallableCommand {
 
@@ -109,6 +109,9 @@ class CallableCommand {
     static CallableCommand create(Object commandObject, Method commandMethod) throws CommandInitializationParseException {
         Command commandAnnotation = commandMethod.getAnnotation(Command.class);
         String commandName = commandAnnotation.value();
+        if (commandName.isEmpty()) {
+            throw new CommandInitializationParseException("Command name is empty");
+        }
         List<CommandParameter> commandParameters = new LinkedList<>();
 
         boolean unnamedParametersDispatched = false;

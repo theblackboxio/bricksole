@@ -1,7 +1,7 @@
 package org.blackbox.bricksole;
 
 /**
- * Created by guillermoblascojimenez on 31/12/14.
+ * Exception thrown when a required parameter is not found in the command line.
  */
 public class RequiredParameterNotFoundException extends CommandRuntimeException {
     public RequiredParameterNotFoundException() {

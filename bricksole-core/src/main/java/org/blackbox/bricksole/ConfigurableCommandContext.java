@@ -1,11 +1,9 @@
 package org.blackbox.bricksole;
 
-import java.io.InputStream;
-import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Configurable command context that allows to load commands initially and to collect them from
@@ -13,7 +11,9 @@ import java.util.Collections;
  */
 public class ConfigurableCommandContext extends AbstractCommandContext {
 
-    private Collection<Object> initialCommands = new ArrayList<>();
+    private final Collection<Object> initialCommands = new ArrayList<>();
+
+    private final List<CommandInspector> commandInspectors = new ArrayList<>();
 
     /**
      * Creates a empty configurable command context. Uses as streams the provided by System.
@@ -22,31 +22,26 @@ public class ConfigurableCommandContext extends AbstractCommandContext {
         super();
     }
 
-    /**
-     * Creates an empty configurable command context with the given streams.
-     *
-     * @param printStream
-     * @param inputStream
-     */
-    public ConfigurableCommandContext(PrintStream printStream, InputStream inputStream) {
-        super(printStream, inputStream);
-    }
-
     public ConfigurableCommandContext(Collection<Object> initialCommands) {
         this();
         this.initialCommands.addAll(initialCommands);
     }
 
-    public ConfigurableCommandContext(PrintStream printStream, InputStream inputStream, Collection<Object> initialCommands) {
-        this(printStream, inputStream);
-        this.initialCommands.addAll(initialCommands);
+    public ConfigurableCommandContext(Configuration configuration) {
+        super(configuration.getPrintStream(), configuration.getInputStream());
+        this.initialCommands.addAll(configuration.getCommands());
+        this.commandInspectors.addAll(configuration.getInspectors());
     }
 
     public void configure() throws CommandInitializationException {
+        for (CommandInspector commandInspector : commandInspectors) {
+            Collection<Object> inspected  = commandInspector.inspect();
+            initialCommands.addAll(inspected);
+        }
         for (Object commands : initialCommands) {
             configureCommand(commands);
         }
-        initialCommands = Collections.emptyList();
+        initialCommands.clear();
         super.configure();
     }
 
@@ -70,7 +65,11 @@ public class ConfigurableCommandContext extends AbstractCommandContext {
             String commandName = prefix + commandAnnotation.value();
             CallableCommand callableCommand = CallableCommand.create(command, commandMethod);
             if (this.commands.containsKey(commandName)) {
-                throw new CommandNameDuplicatedException("Duplicated command name " + commandName);
+                Object oldCommand = this.commands.get(commandName);
+                if (oldCommand != command) {
+                    throw new CommandNameDuplicatedException("Duplicated command name " + commandName + " for different objects: " + oldCommand + ", " + command);
+                }
+                // else, duplicated but is the same object.
             } else {
                 this.commands.put(commandName, callableCommand);
             }

@@ -10,36 +10,37 @@
 
 * Fun
 
-## Where bricksole will go?
+## Modules
 
-Spring web mvc maps url via `@RequestMapping` to class' methods, and also maps the request parameters
-to the method's parameters. Later some response is returned. When dealing with command line apps
-the pattern is the same:
+### bricksole-core
 
-* a command name that works as an url,
+Contains the core of bricksole and can be used programatically standalone.
 
-* some parameters
+### bricksole-spring
 
-* a return
+Contains the classes to build a Spring application based on bricksole-core module.
 
-Example:
+## Example of use
 
-    sh bricksole.sh <command name> <command parameters>
-    >>> <some return>
+    public static void main(String[] args) {
+        String contextLocation = "classpath*:org/blackbox/bricksole/example/spring-context-declarative.xml";
+        List<String> arguments = Arrays.asList(args);
+        Bricksole bricksole = new Bricksole(contextLocation, "commandContext");
+        bricksole.start();
+        bricksole.dispatch(arguments);
+    }
     
-The objective is to evolve `bricksole` until this parallelism meets a nice framework where you can
-do things like that:
-
+And to declare commands simply add a bean of a class like this:
+    
     public class Git {
     
-        @CommandMapping("status")
-        public void status() {...}
+        @Command("status")
+        public String status() {
+            // return status
+        }
         
-        @CommandMapping("commit')
-        public void commit(
-            @CommandParameter("-m") String message, 
-            @CommandParameter("-a") boolean all) {
-            ...
+        @Command("commit")
+        public String commit(@CommandParam("m") String message) {
+            // process commit with message
         }
     }
-

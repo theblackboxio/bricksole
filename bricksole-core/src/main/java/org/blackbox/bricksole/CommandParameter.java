@@ -1,7 +1,7 @@
 package org.blackbox.bricksole;
 
 /**
- * Created by guillermoblascojimenez on 30/12/14.
+ * Class to manage the model of a command parameter
  */
 class CommandParameter {
 
