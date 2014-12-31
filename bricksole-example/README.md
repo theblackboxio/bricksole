@@ -1,16 +1,22 @@
 # bricksole-example
 
-## Compilation
 
-Execute maven goal `package` to create the shell scripts.
+## Try it!
 
-## Execution of example
+Execute on `bricksole-parent`
 
-Find in dir `target/appassembler/bin` the built apps. Here some examples:
-
-    sh target/appassembler/bin/DeclarativeApp.sh version
-    sh target/appassembler/bin/ExplorerApp.sh version
+    mvn install
     
+Execute on `bricksole-example`
+
+    mvn package
+    
+Then try it as a shell app:
+
+    sh target/appassembler/bin/bricksole.sh version
+    
+That will output
+
 ## Notes
 
 Observe the spring context files in `resources` dir.

@@ -15,10 +15,9 @@
      -->
     <bean id="commandContext" class="org.blackbox.bricksole.ConfigurableCommandContext" init-method="configure">
         <constructor-arg>
-            <!-- map of command names to command objects -->
-            <map>
-                <entry key="${command.version.name}" value-ref="versionCommand"/>
-            </map>
+            <list>
+                <ref bean="versionCommand"/>
+            </list>
         </constructor-arg>
     </bean>
 

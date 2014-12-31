@@ -3,7 +3,7 @@ package org.blackbox.bricksole;
 /**
  * Exception thrown in case of that there is no command for the command name.
  */
-public class CommandNotFoundException extends CommandContextException {
+public class CommandNotFoundException extends CommandCallException {
 
     public CommandNotFoundException() {
     }

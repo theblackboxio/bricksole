@@ -1,35 +1,19 @@
 package org.blackbox.bricksole;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Configurable command context that allows to load commands initially and to collect them from
  * spring bean container.
  */
-public class ConfigurableCommandContext extends AbstractCommandContext implements ApplicationContextAware {
+public class ConfigurableCommandContext extends AbstractCommandContext {
 
-    /**
-     * Collection policies.
-     */
-    public enum CollectPolicy {
-        /** This policy shall collect all beans annotated with @NamedCommand */
-        COLLECT_ANNOTATED_WITH_NAME,
-        /** This policy shall collect nothing */
-        COLLECT_NOTHING
-    }
-
-    private CollectPolicy collectPolicy = CollectPolicy.COLLECT_NOTHING;
-
-    private ApplicationContext applicationContext;
-
-    private final Map<String, Command> initialCommands = new HashMap<>();
+    private Collection<Object> initialCommands = new ArrayList<>();
 
     /**
      * Creates a empty configurable command context. Uses as streams the provided by System.
@@ -48,49 +32,50 @@ public class ConfigurableCommandContext extends AbstractCommandContext implement
         super(printStream, inputStream);
     }
 
-    public ConfigurableCommandContext(Map<String, ? extends Command> initialCommands) {
+    public ConfigurableCommandContext(Collection<Object> initialCommands) {
         this();
-        this.initialCommands.putAll(initialCommands);
+        this.initialCommands.addAll(initialCommands);
     }
 
-    public ConfigurableCommandContext(PrintStream printStream, InputStream inputStream, Map<String, ? extends Command> initialCommands) {
+    public ConfigurableCommandContext(PrintStream printStream, InputStream inputStream, Collection<Object> initialCommands) {
         this(printStream, inputStream);
-        this.initialCommands.putAll(initialCommands);
+        this.initialCommands.addAll(initialCommands);
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-
-    public CollectPolicy getCollectPolicy() {
-        return collectPolicy;
-    }
-
-    public void setCollectPolicy(CollectPolicy collectPolicy) {
-        this.collectPolicy = collectPolicy;
-    }
-
-    public void configure() throws CommandNameDuplicatedException {
-        super.addAllCommands(initialCommands);
-        switch (collectPolicy) {
-
-            case COLLECT_ANNOTATED_WITH_NAME:
-                Map<String, Object> commands = applicationContext.getBeansWithAnnotation(NamedCommand.class);
-
-                for (Object command : commands.values()) {
-                    String name = command.getClass().getAnnotation(NamedCommand.class).value();
-                    Command oldCommand = this.commands.putIfAbsent(name, (Command) command);
-                    if (oldCommand != null) {
-                        throw new CommandNameDuplicatedException("Multiple commands for name \"" + name + "\" :" + command.getClass() + ", " + oldCommand.getClass());
-                    }
-                }
-                break;
-            case COLLECT_NOTHING:
-            default:
-                break;
+    public void configure() throws CommandInitializationException {
+        for (Object commands : initialCommands) {
+            configureCommand(commands);
         }
+        initialCommands = Collections.emptyList();
+        super.configure();
+    }
+
+    private void configureCommand(Object command) throws CommandInitializationException {
+
+        assert command != null;
+        Class<?> commandClass = command.getClass();
+
+        Command topLevelAnnotation = commandClass.getAnnotation(Command.class);
+        String topLevelName;
+        if (topLevelAnnotation == null) {
+            topLevelName = "";
+        } else {
+            topLevelName = topLevelAnnotation.value();
+        }
+
+        String prefix = (topLevelName.length() == 0) ? "" : topLevelName + ":";
+
+        for (Method commandMethod : Reflections.getMethodAnnotatedWith(commandClass, Command.class)) {
+            Command commandAnnotation = commandMethod.getAnnotation(Command.class);
+            String commandName = prefix + commandAnnotation.value();
+            CallableCommand callableCommand = CallableCommand.create(command, commandMethod);
+            if (this.commands.containsKey(commandName)) {
+                throw new CommandNameDuplicatedException("Duplicated command name " + commandName);
+            } else {
+                this.commands.put(commandName, callableCommand);
+            }
+        }
+
     }
 
 }

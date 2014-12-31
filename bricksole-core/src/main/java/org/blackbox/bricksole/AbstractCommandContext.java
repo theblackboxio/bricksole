@@ -3,7 +3,6 @@ package org.blackbox.bricksole;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -17,7 +16,8 @@ abstract class AbstractCommandContext implements CommandContext {
 
     private final PrintStream printStream;
     private final InputStream inputStream;
-    protected final ConcurrentMap<String, Command> commands;
+    protected final ConcurrentMap<String, CallableCommand> commands;
+    private Status status;
 
     /**
      * Builds the command context with System.out and System.in as default streams.
@@ -36,11 +36,12 @@ abstract class AbstractCommandContext implements CommandContext {
         this.printStream = printStream;
         this.inputStream = inputStream;
         this.commands = new ConcurrentHashMap<>();
+        this.status = Status.DECLARED;
     }
 
     @Override
-    public void execute(String commandName, List<String> args) throws CommandNotFoundException {
-        Command command = commands.get(commandName);
+    public void execute(String commandName, List<String> args) throws CommandNotFoundException, CommandCallException {
+        CallableCommand command = commands.get(commandName);
         if (command == null) {
             throw new CommandNotFoundException("Command with name \"" + commandName + "\" not found in context.");
         } else {
@@ -69,44 +70,12 @@ abstract class AbstractCommandContext implements CommandContext {
     }
 
     @Override
-    public boolean containsCommend(Command command) {
-        return commands.containsValue(command);
+    public boolean isConfigured() {
+        return Status.CONFIGURED.equals(this.status);
     }
 
     @Override
-    public void addCommand(String commandName, Command command) {
-        commands.putIfAbsent(commandName, command);
-    }
-
-    @Override
-    public void addAllCommands(Map<String, ? extends Command> commands) {
-        for (Map.Entry<String, ? extends Command> command : commands.entrySet()) {
-            this.commands.putIfAbsent(command.getKey(), command.getValue());
-        }
-    }
-
-    @Override
-    public void overrideCommand(String commandName, Command command) {
-        commands.put(commandName, command);
-    }
-
-    @Override
-    public void overrideAllCommands(Map<String, ? extends Command> commands) {
-        this.commands.putAll(commands);
-    }
-
-    @Override
-    public void remove(String commandName) {
-        commands.remove(commandName);
-    }
-
-    @Override
-    public int size() {
-        return commands.size();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return commands.isEmpty();
+    public void configure() throws CommandInitializationException {
+        this.status = Status.CONFIGURED;
     }
 }

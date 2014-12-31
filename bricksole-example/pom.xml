@@ -52,11 +52,7 @@
                     <programs>
                         <program>
                             <mainClass>org.blackbox.bricksole.example.DeclarativeApp</mainClass>
-                            <id>DeclarativeApp</id>
-                        </program>
-                        <program>
-                            <mainClass>org.blackbox.bricksole.example.ExplorerApp</mainClass>
-                            <id>ExplorerApp</id>
+                            <id>bricksole</id>
                         </program>
                     </programs>
                 </configuration>
