@@ -1,24 +1,24 @@
 # bricksole
 
-`bricksole` is a Spring based framework to develop command line applications. But, why `bricksole`?
+`bricksole` is a Spring based framework to develop command line applications. We think that `bricksole` rocks, because:
 
 * Command line java applications may be used to rapidly test and develop systems and infrastructure,
 
-* Command line java applications follows some patterns that remembers to the web-mvc spring,
+* Command line java applications follow some patterns that remember to the web-mvc spring pattern,
 
 * Spring is a great framework,
 
-* Fun
+* It's fun!
 
 ## Modules
 
 ### bricksole-core
 
-Contains the core of bricksole and can be used programatically standalone.
+Contains the core of bricksole. Can be used programatically as a standalone library.
 
 ### bricksole-spring
 
-Contains the classes to build a Spring application based on bricksole-core module.
+Contains the classes to build a Spring application be based on the bricksole-core module.
 
 ## Example of use
 
@@ -30,7 +30,7 @@ Contains the classes to build a Spring application based on bricksole-core modul
         bricksole.dispatch(arguments);
     }
     
-And to declare commands simply add a bean of a class like this:
+To declare commands, simply add a bean of a class. Something like this:
     
     public class Git {
     
